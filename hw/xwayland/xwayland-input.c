@@ -1145,6 +1145,17 @@ init_relative_pointer_manager(struct xwl_screen *xwl_screen,
                          1);
 }
 
+static void
+init_pointer_constraints(struct xwl_screen *xwl_screen,
+                         uint32_t id, uint32_t version)
+{
+    xwl_screen->pointer_constraints =
+        wl_registry_bind(xwl_screen->registry, id,
+                         &zwp_pointer_constraints_v1_interface,
+                         1);
+}
+
+static void
 input_handler(void *data, struct wl_registry *registry, uint32_t id,
               const char *interface, uint32_t version)
 {
@@ -1155,6 +1166,8 @@ input_handler(void *data, struct wl_registry *registry, uint32_t id,
         xwl_screen->expecting_event++;
     } else if (strcmp(interface, "zwp_relative_pointer_manager_v1") == 0) {
         init_relative_pointer_manager(xwl_screen, id, version);
+    } else if (strcmp(interface, "zwp_pointer_constraints_v1") == 0) {
+        init_pointer_constraints(xwl_screen, id, version);
     }
 }
 
